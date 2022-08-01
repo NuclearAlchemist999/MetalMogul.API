@@ -10,7 +10,7 @@ namespace MetalMogul.Data
         }
         public DbSet<Band> Bands => Set<Band>();
         public DbSet<BandConcert> Bands_Concerts => Set<BandConcert>();
-        public DbSet<City> Cities => Set<City>();
+        public DbSet<Venue> Venues => Set<Venue>();
         public DbSet<Concert> Concerts => Set<Concert>();
         public DbSet<ConcertOrder> Concerts_Orders => Set<ConcertOrder>();
         public DbSet<Customer> Customers => Set<Customer>();
