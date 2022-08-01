@@ -66,28 +66,10 @@ namespace MetalMogul.Migrations
                     b.ToTable("Bands_Concerts");
                 });
 
-            modelBuilder.Entity("MetalMogul.Models.City", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cities");
-                });
-
             modelBuilder.Entity("MetalMogul.Models.Concert", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Position")
@@ -103,9 +85,12 @@ namespace MetalMogul.Migrations
                     b.Property<int>("TicketsLeft")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("VenueId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Concerts");
                 });
@@ -176,6 +161,21 @@ namespace MetalMogul.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("MetalMogul.Models.Venue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Venues");
+                });
+
             modelBuilder.Entity("MetalMogul.Models.BandConcert", b =>
                 {
                     b.HasOne("MetalMogul.Models.Band", "Band")
@@ -197,13 +197,13 @@ namespace MetalMogul.Migrations
 
             modelBuilder.Entity("MetalMogul.Models.Concert", b =>
                 {
-                    b.HasOne("MetalMogul.Models.City", "City")
+                    b.HasOne("MetalMogul.Models.Venue", "Venue")
                         .WithMany()
-                        .HasForeignKey("CityId")
+                        .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("City");
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("MetalMogul.Models.ConcertOrder", b =>

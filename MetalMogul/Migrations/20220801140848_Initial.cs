@@ -24,18 +24,6 @@ namespace MetalMogul.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cities",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -50,25 +38,15 @@ namespace MetalMogul.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Concerts",
+                name: "Venues",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TicketsLeft = table.Column<int>(type: "int", nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Concerts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Concerts_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Venues", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,6 +64,28 @@ namespace MetalMogul.Migrations
                         name: "FK_Orders_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Concerts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VenueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TicketsLeft = table.Column<int>(type: "int", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Concerts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Concerts_Venues_VenueId",
+                        column: x => x.VenueId,
+                        principalTable: "Venues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -152,9 +152,9 @@ namespace MetalMogul.Migrations
                 column: "ConcertId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Concerts_CityId",
+                name: "IX_Concerts_VenueId",
                 table: "Concerts",
-                column: "CityId");
+                column: "VenueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Concerts_Orders_ConcertId",
@@ -190,7 +190,7 @@ namespace MetalMogul.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Cities");
+                name: "Venues");
 
             migrationBuilder.DropTable(
                 name: "Customers");
