@@ -9,5 +9,6 @@
         public int TicketsLeft { get; set; }
         public string Position { get; set; }
         public double Price { get; set; }
+        public BandConcert BandConcert { get; set; }
     }
 }

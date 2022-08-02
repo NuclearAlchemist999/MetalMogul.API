@@ -1,6 +1,7 @@
 ﻿using MetalMogul.Dto.Converters;
 using MetalMogul.Dto.DtoModels;
 using MetalMogul.JoinModels;
+using MetalMogul.Models;
 using MetalMogul.Repositories.ConcertRepository;
 
 namespace MetalMogul.Services.ConcertService
@@ -19,6 +20,15 @@ namespace MetalMogul.Services.ConcertService
             var concerts = await _concertRepo.GetConcerts();
 
             return concerts.ToConcertInfoDtoList();
+        }
+
+        public async Task<ConcertInfoDto> GetConcert(Guid concertId)
+        {
+            var concerts = await _concertRepo.GetConcerts();
+
+            var concert = concerts.FirstOrDefault(c => c.ConcertId == concertId);
+
+            return concert.ToConcertInfoDto();
         }
     }
 }

@@ -13,12 +13,20 @@ namespace MetalMogul.Controllers
         {
             _concertService = concertService;
         }
-
+        [HttpGet]
         public async Task<IActionResult> GetConcerts()
         {
             var concerts = await _concertService.GetConcerts();
 
             return Ok(concerts);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetConcert(Guid id)
+        {
+            var concert = await _concertService.GetConcert(id);
+
+            return Ok(concert);
+        }
+
     }
 }
