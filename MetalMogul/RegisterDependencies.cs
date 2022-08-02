@@ -1,4 +1,6 @@
 ﻿using MetalMogul.Data;
+using MetalMogul.Repositories.ConcertRepository;
+using MetalMogul.Services.ConcertService;
 using Microsoft.EntityFrameworkCore;
 
 namespace MetalMogul
@@ -13,6 +15,12 @@ namespace MetalMogul
             {
                 options.UseSqlServer(connectionString);
             });
+        }
+
+        public static void ConfigureServices(this IServiceCollection services)
+        {
+            services.AddScoped<IConcertRepository, ConcertRepository>();
+            services.AddScoped<IConcertService, ConcertService>();
         }
     }
 }
