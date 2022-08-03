@@ -32,5 +32,51 @@ namespace MetalMogul.Repositories.ConcertRepository
 
             return concerts;
         }
+
+        public async Task<Customer> AddCustomer(Customer customer)
+        {
+            _metalDbContext.Customers.Add(customer);
+
+            await _metalDbContext.SaveChangesAsync();
+
+            return customer;
+        }
+
+        public async Task<Customer> SearchCustomer(string email)
+        {
+            return await _metalDbContext.Customers.FirstOrDefaultAsync(c => c.Email == email);
+        }
+
+        public async Task<Concert> SearchConcert(Guid concertId)
+        {
+            return await _metalDbContext.Concerts.FindAsync(concertId);
+        }
+
+        public async Task<Order> AddOrder(Order order)
+        {
+            _metalDbContext.Orders.Add(order);
+
+            await _metalDbContext.SaveChangesAsync();
+
+            return order;
+        }
+
+        public async Task<ConcertOrder> AddConcertOrder(ConcertOrder ticket)
+        {
+            _metalDbContext.Concerts_Orders.Add(ticket);
+
+            await _metalDbContext.SaveChangesAsync();
+
+            return ticket;
+        }
+
+        public async Task<Concert> UpdateConcert(Concert concert)
+        {
+            _metalDbContext.Concerts.Update(concert);
+
+            await _metalDbContext.SaveChangesAsync();
+
+            return concert;
+        }
     }
 }

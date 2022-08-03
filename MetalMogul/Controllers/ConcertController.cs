@@ -1,4 +1,5 @@
-﻿using MetalMogul.Services.ConcertService;
+﻿using MetalMogul.Dto.Request;
+using MetalMogul.Services.ConcertService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MetalMogul.Controllers
@@ -13,6 +14,7 @@ namespace MetalMogul.Controllers
         {
             _concertService = concertService;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetConcerts()
         {
@@ -20,6 +22,7 @@ namespace MetalMogul.Controllers
 
             return Ok(concerts);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetConcert(Guid id)
         {
@@ -28,5 +31,12 @@ namespace MetalMogul.Controllers
             return Ok(concert);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> BookTickets(BookTicketsRequestDto request)
+        {
+            await _concertService.BookTickets(request);
+
+            return Ok();
+        }
     }
 }
