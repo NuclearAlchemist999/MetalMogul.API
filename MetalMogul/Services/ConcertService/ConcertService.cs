@@ -1,6 +1,7 @@
 ﻿using MetalMogul.Dto.Converters;
 using MetalMogul.Dto.DtoModels;
 using MetalMogul.Dto.Request;
+using MetalMogul.JoinModels;
 using MetalMogul.Models;
 using MetalMogul.Repositories.ConcertRepository;
 
@@ -14,24 +15,62 @@ namespace MetalMogul.Services.ConcertService
         {
             _concertRepo = concertRepo;
         }
-
-        public async Task<List<ConcertInfoDto>> GetConcerts()
+        public async Task<List<ConcertInfo>> GetConcerts()
         {
             var concerts = await _concertRepo.GetConcerts();
 
-            return concerts.ToConcertInfoDtoList();
+            return concerts.Select(c => new ConcertInfo
+            {
+                ConcertId = c.Id,
+                StartTime = c.StartTime,
+                Venue = c.Venue.Name,
+                Price = c.Price,
+                Bands = c.BandConcerts.Select(b => new BandDto
+                {
+                    BandName = b.Band.Name,
+                    Description = b.Band.Description
+
+                }).ToList()
+
+            }).ToList();
         }
 
-        public async Task<ConcertInfoDto> GetConcert(Guid concertId)
+        public async Task<OrderInfo> GetOrder(Guid orderId)
         {
-            var concerts = await _concertRepo.GetConcerts();
+            var ordersRep = await _concertRepo.GetOrders();
+
+            var orders = ordersRep
+               .Where(o => o.Id == orderId)
+               .Select(o => new OrderInfo
+               {
+                   FirstName = o.Customer.FirstName,
+                   LastName = o.Customer.LastName,
+                   Email = o.Customer.Email,
+                   OrderId = o.Id,
+                   OrderDetails = o.ConcertOrders.Select(c => new OrderInfoDetails
+                   {
+                       Venue = c.Concert.Venue.Name,
+                       Price = c.Concert.Price,
+                       Quantity = c.NumberOfTickets,
+                       Bands = c.Concert.BandConcerts.Select(x => x.Band.Name).ToList(),
+
+                   }).ToList()
+
+               }).ToList();
+
+            return orders.FirstOrDefault(x => x.OrderId == orderId);
+        }
+
+        public async Task<ConcertInfo> GetConcert(Guid concertId)
+        {
+            var concerts = await GetConcerts();
 
             var concert = concerts.FirstOrDefault(c => c.ConcertId == concertId);
 
-            return concert.ToConcertInfoDto();
+            return concert;
         }
 
-        public async Task BookTickets(BookTicketsRequestDto request)
+        public async Task<OrderInfo> BookTickets(BookTicketsRequestDto request)
         {
             await CheckTicketsLeft(request);
 
@@ -77,6 +116,10 @@ namespace MetalMogul.Services.ConcertService
 
                 await _concertRepo.UpdateConcert(concert);
             }
+
+            var orderInfo = await GetOrder(order.Id);
+
+            return orderInfo;
         }
 
         public async Task CheckTicketsLeft(BookTicketsRequestDto request)

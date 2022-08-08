@@ -7,8 +7,8 @@ namespace MetalMogul.Services.ConcertService
 {
     public interface IConcertService
     {
-        Task<List<ConcertInfoDto>> GetConcerts();
-        Task<ConcertInfoDto> GetConcert(Guid concertId);
-        Task BookTickets(BookTicketsRequestDto request);
+        Task<List<ConcertInfo>> GetConcerts();
+        Task<ConcertInfo> GetConcert(Guid concertId);
+        Task<OrderInfo> BookTickets(BookTicketsRequestDto request);
     }
 }

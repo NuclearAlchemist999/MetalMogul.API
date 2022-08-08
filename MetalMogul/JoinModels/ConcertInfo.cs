@@ -1,11 +1,13 @@
-﻿namespace MetalMogul.JoinModels
+﻿using MetalMogul.Dto.DtoModels;
+
+namespace MetalMogul.JoinModels
 {
     public class ConcertInfo
     {
-        public string BandName { get; set; }
+        public Guid ConcertId { get; set; }
         public DateTime StartTime { get; set; }
         public string Venue { get; set; }
         public double Price { get; set; }
-        public Guid ConcertId { get; set; }
+        public List<BandDto> Bands { get; set; }
     }
 }

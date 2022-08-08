@@ -34,9 +34,9 @@ namespace MetalMogul.Controllers
         [HttpPost]
         public async Task<IActionResult> BookTickets(BookTicketsRequestDto request)
         {
-            await _concertService.BookTickets(request);
+            var order = await _concertService.BookTickets(request);
 
-            return Ok();
+            return Ok(order);
         }
     }
 }

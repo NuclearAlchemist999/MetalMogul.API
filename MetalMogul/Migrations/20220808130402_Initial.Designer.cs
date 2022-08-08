@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetalMogul.Migrations
 {
     [DbContext(typeof(MetalDbContext))]
-    [Migration("20220801140848_Initial")]
+    [Migration("20220808130402_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,15 +31,12 @@ namespace MetalMogul.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhotoURL")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -73,10 +70,6 @@ namespace MetalMogul.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -128,15 +121,12 @@ namespace MetalMogul.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -152,6 +142,9 @@ namespace MetalMogul.Migrations
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("TotalSum")
                         .HasColumnType("float");
@@ -170,7 +163,6 @@ namespace MetalMogul.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -181,13 +173,13 @@ namespace MetalMogul.Migrations
             modelBuilder.Entity("MetalMogul.Models.BandConcert", b =>
                 {
                     b.HasOne("MetalMogul.Models.Band", "Band")
-                        .WithMany()
+                        .WithMany("BandConcerts")
                         .HasForeignKey("BandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MetalMogul.Models.Concert", "Concert")
-                        .WithMany()
+                        .WithMany("BandConcerts")
                         .HasForeignKey("ConcertId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -211,13 +203,13 @@ namespace MetalMogul.Migrations
             modelBuilder.Entity("MetalMogul.Models.ConcertOrder", b =>
                 {
                     b.HasOne("MetalMogul.Models.Concert", "Concert")
-                        .WithMany()
+                        .WithMany("ConcertOrders")
                         .HasForeignKey("ConcertId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MetalMogul.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("ConcertOrders")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -236,6 +228,23 @@ namespace MetalMogul.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("MetalMogul.Models.Band", b =>
+                {
+                    b.Navigation("BandConcerts");
+                });
+
+            modelBuilder.Entity("MetalMogul.Models.Concert", b =>
+                {
+                    b.Navigation("BandConcerts");
+
+                    b.Navigation("ConcertOrders");
+                });
+
+            modelBuilder.Entity("MetalMogul.Models.Order", b =>
+                {
+                    b.Navigation("ConcertOrders");
                 });
 #pragma warning restore 612, 618
         }

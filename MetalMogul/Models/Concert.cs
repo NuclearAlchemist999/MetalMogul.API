@@ -7,8 +7,9 @@
         public Guid VenueId { get; set; }
         public DateTime StartTime { get; set; }
         public int TicketsLeft { get; set; }
-        public string Position { get; set; }
         public double Price { get; set; }
-        public BandConcert BandConcert { get; set; }
+        public List<ConcertOrder> ConcertOrders { get; set; }
+        public List<BandConcert> BandConcerts { get; set; }
+
     }
 }

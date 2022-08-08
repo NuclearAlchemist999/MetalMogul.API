@@ -9,7 +9,8 @@ namespace MetalMogul.Dto.Converters
         {
             return new ConcertInfoDto
             {
-                BandName = concert.BandName,
+                Venue = concert.Venue,
+                Bands = concert.Bands, 
                 StartTime = concert.StartTime.ToString().Substring(0, 16),
                 Price= (decimal)concert.Price
             };
