@@ -2,6 +2,7 @@
 using MetalMogul.Repositories.ConcertRepository;
 using MetalMogul.Services.ConcertService;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace MetalMogul
 {
@@ -21,6 +22,12 @@ namespace MetalMogul
         {
             services.AddScoped<IConcertRepository, ConcertRepository>();
             services.AddScoped<IConcertService, ConcertService>();
+        }
+
+        public static void IgnoreCycles(this IServiceCollection services)
+        {
+            services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         }
     }
 }

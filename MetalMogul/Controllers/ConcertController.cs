@@ -38,5 +38,13 @@ namespace MetalMogul.Controllers
 
             return Ok(order);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchBandsAndConcerts(string searchQuery)
+        {
+            var searchItems = await _concertService.SearchBandsAndConcerts(searchQuery);
+
+            return Ok(searchItems);
+        }
     }
 }
