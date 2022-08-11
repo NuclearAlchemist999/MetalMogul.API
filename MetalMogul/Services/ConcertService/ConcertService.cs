@@ -14,9 +14,9 @@ namespace MetalMogul.Services.ConcertService
         {
             _concertRepo = concertRepo;
         }
-        public async Task<List<ConcertInfoDto>> GetConcerts()
+        public async Task<List<ConcertInfoDto>> GetConcerts(string orderBy)
         {
-            var concerts = await _concertRepo.GetConcerts();
+            var concerts = await _concertRepo.GetConcerts(orderBy);
 
             return concerts.ToConcertInfoDtoList();
         }
@@ -28,9 +28,9 @@ namespace MetalMogul.Services.ConcertService
             return orders.FirstOrDefault(x => x.Id == orderId);
         }
 
-        public async Task<ConcertInfoDto> GetConcert(Guid concertId)
+        public async Task<ConcertInfoDto> GetConcert(Guid concertId, string orderBy)
         {
-            var concerts = await _concertRepo.GetConcerts();
+            var concerts = await _concertRepo.GetConcerts(orderBy);
 
             var concert = concerts.FirstOrDefault(c => c.Id == concertId);
 
@@ -101,9 +101,9 @@ namespace MetalMogul.Services.ConcertService
                 }
             }
         }
-        public async Task<List<ConcertInfoDto>> SearchBandsAndConcerts(string searchQuery)
+        public async Task<List<ConcertInfoDto>> SearchBandsAndConcerts(string searchQuery, string orderBy)
         {
-            var concerts = await _concertRepo.GetConcerts();
+            var concerts = await _concertRepo.GetConcerts(orderBy);
 
             var searchItems = concerts.Where(c => c.BandConcerts.Any(b => b.Band.Name.ToLower().Contains(searchQuery.ToLower()))
             || c.Venue.Name.ToLower().Contains(searchQuery.ToLower())).ToList();

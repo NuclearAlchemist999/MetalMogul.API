@@ -16,17 +16,17 @@ namespace MetalMogul.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetConcerts()
+        public async Task<IActionResult> GetConcerts(string orderBy)
         {
-            var concerts = await _concertService.GetConcerts();
+            var concerts = await _concertService.GetConcerts(orderBy);
 
             return Ok(concerts);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetConcert(Guid id)
+        public async Task<IActionResult> GetConcert(Guid id, string orderBy)
         {
-            var concert = await _concertService.GetConcert(id);
+            var concert = await _concertService.GetConcert(id, orderBy);
 
             return Ok(concert);
         }
@@ -40,9 +40,9 @@ namespace MetalMogul.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchBandsAndConcerts(string searchQuery)
+        public async Task<IActionResult> SearchBandsAndConcerts(string searchQuery, string orderBy)
         {
-            var searchItems = await _concertService.SearchBandsAndConcerts(searchQuery);
+            var searchItems = await _concertService.SearchBandsAndConcerts(searchQuery, orderBy);
 
             return Ok(searchItems);
         }

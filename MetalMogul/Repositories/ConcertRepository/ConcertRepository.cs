@@ -1,4 +1,5 @@
 ﻿using MetalMogul.Data;
+using MetalMogul.Extensions;
 using MetalMogul.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,13 @@ namespace MetalMogul.Repositories.ConcertRepository
             _metalDbContext = metalDbContext;
         }
 
-        public async Task<List<Concert>> GetConcerts()
+        public async Task<List<Concert>> GetConcerts(string orderBy)
         {
             return await _metalDbContext.Concerts
                    .Include(c => c.BandConcerts)
                    .ThenInclude(c => c.Band)
                    .Include(c => c.Venue)
+                   .Sort(orderBy)
                    .ToListAsync();
         }
         public async Task<Customer> AddCustomer(Customer customer)

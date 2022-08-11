@@ -4,7 +4,7 @@ namespace MetalMogul.Repositories.ConcertRepository
 {
     public interface IConcertRepository
     {
-        Task<List<Concert>> GetConcerts();
+        Task<List<Concert>> GetConcerts(string orderBy);
         Task<Customer> AddCustomer(Customer customer);
         Task<Customer> SearchCustomer(string email);
         Task<Order> AddOrder(Order order);
