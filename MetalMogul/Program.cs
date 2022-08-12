@@ -1,4 +1,5 @@
 using MetalMogul;
+using MetalMogul.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.IgnoreCycles();
 builder.Services.ConfigureServices();
 
 var app = builder.Build();
+
+app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
 

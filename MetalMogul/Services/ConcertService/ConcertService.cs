@@ -1,8 +1,10 @@
 ﻿using MetalMogul.Dto.Converters;
 using MetalMogul.Dto.DtoModels;
 using MetalMogul.Dto.Request;
+using MetalMogul.Exceptions;
 using MetalMogul.Models;
 using MetalMogul.Repositories.ConcertRepository;
+using System.Text.RegularExpressions;
 
 namespace MetalMogul.Services.ConcertService
 {
@@ -24,22 +26,30 @@ namespace MetalMogul.Services.ConcertService
         public async Task<Order> GetOrder(Guid orderId)
         {
             var orders = await _concertRepo.GetOrders();
-     
-            return orders.FirstOrDefault(x => x.Id == orderId);
-        }
 
+            var order = orders.FirstOrDefault(x => x.Id == orderId);
+
+            if (order == null) throw new OrderNotFoundException(orderId);
+
+            return order;
+        }
         public async Task<ConcertInfoDto> GetConcert(Guid concertId, string orderBy)
         {
             var concerts = await _concertRepo.GetConcerts(orderBy);
 
             var concert = concerts.FirstOrDefault(c => c.Id == concertId);
 
+            if (concert == null) throw new ConcertNotfoundException(concertId);
+
             return concert.ToConcertInfoDto();
         }
-
         public async Task<OrderInfoDto> BookTickets(BookTicketsRequestDto request)
         {
             await CheckTicketsLeft(request);
+
+            bool validateEmail = EmailValidation(request.Email);
+
+            if (!validateEmail) throw new InvalidEmailException();
 
             var customer = await _concertRepo.SearchCustomer(request.Email);
 
@@ -97,7 +107,7 @@ namespace MetalMogul.Services.ConcertService
                
                 if (concert.TicketsLeft < ticket.Quantity)
                 {
-                    throw new Exception("No more tickets than tickets left.");
+                    throw new ExceedTicketsLeftException();
                 }
             }
         }
@@ -119,11 +129,24 @@ namespace MetalMogul.Services.ConcertService
                     ConcertId = ticket.ConcertId,
                     Quantity = ticket.Quantity,
                     Concert = await _concertRepo.SearchConcert(ticket.ConcertId)
+
                 }).ToList();
 
             var tasks = await Task.WhenAll(items);
 
             return tasks.Sum(x => x.Quantity * x.Concert.Price);
+        }
+
+        public bool EmailValidation(string email)
+        {
+            var haveCharacters = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+
+            if (!haveCharacters.IsMatch(email))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
