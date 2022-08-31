@@ -11,11 +11,15 @@ builder.Services.IgnoreCycles();
 
 builder.Services.ConfigureServices();
 
+builder.Services.ConfigureCors();
+
 var app = builder.Build();
 
 app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

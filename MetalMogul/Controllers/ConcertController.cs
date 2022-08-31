@@ -40,8 +40,11 @@ namespace MetalMogul.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchBandsAndConcerts(string searchQuery, string orderBy)
+        public async Task<IActionResult> SearchBandsAndConcerts([FromQuery] string searchQuery, string orderBy)
         {
+            if (string.IsNullOrEmpty(searchQuery))
+                return BadRequest("Nothing");
+
             var searchItems = await _concertService.SearchBandsAndConcerts(searchQuery, orderBy);
 
             return Ok(searchItems);
